@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:camel="http://camel.apache.org/schema/spring"
+	xsi:schemaLocation=" http://www.springframework.org/schema/beans
+        				 http://www.springframework.org/schema/beans/spring-beans.xsd
+        				 http://camel.apache.org/schema/cxf
+       					 http://camel.apache.org/schema/cxf/camel-cxf.xsd
+       					 http://cxf.apache.org/jaxrs
+        				 http://cxf.apache.org/schemas/jaxrs.xsd
+       					 http://camel.apache.org/schema/spring
+        				 http://camel.apache.org/schema/spring/camel-spring.xsd
+       					 http://www.springframework.org/schema/context 
+       					 http://www.springframework.org/schema/context/spring-context.xsd">
+<!-- 
+	<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+		<property name="brokerURL" value="tcp://127.0.0.1:61616" />
+	</bean>	
+ -->
+
+<camel:camelContext id="camelContext">
+	<camel:route>
+		<camel:from uri="file:data/in?noop=true"/>
+		<camel:split streaming="true">
+				<camel:tokenize token=","/>
+               	<camel:setBody>
+               		<camel:simple>${body.trim()}</camel:simple>
+               	</camel:setBody>
+                <camel:to uri="stream:out"/>
+            </camel:split>
+	</camel:route>
+</camel:camelContext>	
+		
+</beans>
+
